@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>准星匣</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <h1>准星匣</h1>
+            <p>离线准星图鉴</p>
+          </div>
+        </div>
+
+        <nav class="primary-nav" aria-label="主导航">
+          <button class="nav-item active" data-view="all">
+            <span class="nav-icon">⌖</span><span>探索准星</span><b id="allCount">150</b>
+          </button>
+          <button class="nav-item" data-view="diy">
+            <span class="nav-icon">DIY</span><span>DIY 准星</span><b id="diyCount">0</b>
+          </button>
+          <button class="nav-item" data-view="china">
+            <span class="nav-icon">CN</span><span>中国赛区</span><b id="chinaCount">0</b>
+          </button>
+          <button class="nav-item" data-view="pro">
+            <span class="nav-icon pro-icon">★</span><span>职业选手</span><b id="proCount">0</b>
+          </button>
+          <button class="nav-item" data-view="favorites">
+            <span class="nav-icon">♡</span><span>我的收藏</span><b id="favoriteCount">0</b>
+          </button>
+          <button class="nav-item" data-view="recent">
+            <span class="nav-icon">↺</span><span>最近查看</span><b id="recentCount">0</b>
+          </button>
+        </nav>
+
+        <div class="sidebar-label">按形态浏览</div>
+        <nav class="style-nav" aria-label="准星形态">
+          <button data-style="点状"><i class="dot-icon"></i>点状准星</button>
+          <button data-style="十字"><i class="cross-icon"></i>十字准星</button>
+          <button data-style="空心"><i class="ring-icon"></i>空心准星</button>
+          <button data-style="外线"><i class="outer-icon"></i>外线准星</button>
+          <button data-style="动态"><i class="dynamic-icon"></i>动态准星</button>
+        </nav>
+
+        <div class="safety-card">
+          <span class="safety-dot"></span>
+          <div>
+            <strong>独立离线运行</strong>
+            <p>不连接、检测或修改游戏</p>
+          </div>
+        </div>
+
+        <button id="aboutButton" class="about-button">关于与安全说明</button>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div id="libraryTopbar" class="topbar-mode">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m21 21-4.4-4.4m2.4-5.1a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"></path>
+              </svg>
+              <input id="searchInput" type="search" placeholder="搜索准星名称、选手 ID 或战队…" autocomplete="off" />
+              <kbd>Ctrl K</kbd>
+            </div>
+            <button id="randomButton" class="secondary-button">
+              <span>⌘</span> 随机一个
+            </button>
+            <button id="importButton" class="primary-button">
+              <span>＋</span> 导入代码预览
+            </button>
+          </div>
+          <div id="diyTopbar" class="diy-topbar hidden">
+            <div><strong>积木式准星工坊</strong><span>用直观选项生成游戏原生代码</span></div>
+            <p><i></i>仅在本机生成文本，不接触游戏</p>
+          </div>
+          <label class="language-selector" title="界面语言">
+            <span aria-hidden="true">文</span>
+            <select id="languageSelect" aria-label="界面语言">
+              <option value="zh-CN">中文</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+        </header>
+
+        <div id="libraryWorkspace">
+          <section class="content-head">
+            <div>
+              <div class="eyebrow" id="eyebrow">CROSSHAIR LIBRARY</div>
+              <h2 id="pageTitle">探索你的下一枚准星</h2>
+              <p id="pageSubtitle">从职业选手配置到经典常用样式，点击卡片即可预览和复制。</p>
+            </div>
+            <div class="headline-stat">
+              <strong id="resultCount">150</strong>
+              <span>枚可选准星</span>
+            </div>
+          </section>
+
+          <section class="filters" aria-label="筛选工具">
+            <div class="filter-tabs" id="filterTabs">
+              <button class="active" data-filter="全部">全部</button>
+              <button data-filter="热门">热门推荐</button>
+              <button data-filter="点状">点状</button>
+              <button data-filter="十字">十字</button>
+              <button data-filter="空心">空心</button>
+              <button data-filter="外线">外线</button>
+              <button data-filter="动态">动态</button>
+            </div>
+            <div class="filter-actions">
+              <label class="select-wrap">
+                <span>颜色</span>
+                <select id="colorSelect">
+                  <option value="全部">全部颜色</option>
+                  <option value="青色">青色</option>
+                  <option value="白色">白色</option>
+                  <option value="绿色">绿色</option>
+                  <option value="红色">红色</option>
+                  <option value="黄色">黄色</option>
+                  <option value="粉色">粉色</option>
+                  <option value="自定义">自定义色</option>
+                </select>
+              </label>
+              <label class="select-wrap">
+                <span>排序</span>
+                <select id="sortSelect">
+                  <option value="recommended">推荐优先</option>
+                  <option value="name">名称排序</option>
+                  <option value="latest">最近核验</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section id="crosshairGrid" class="crosshair-grid" aria-live="polite"></section>
+          <div id="emptyState" class="empty-state hidden">
+            <div class="empty-mark">⌖</div>
+            <h3>没有找到匹配的准星</h3>
+            <p>换一个关键词，或者清除筛选条件再试试。</p>
+            <button id="clearFilters" class="secondary-button">清除筛选</button>
+          </div>
+        </div>
+
+        <section id="diyWorkspace" class="diy-workspace hidden" aria-label="DIY 准星工坊">
+          <div class="diy-head">
+            <div>
+              <div class="eyebrow">DIY CROSSHAIR STUDIO</div>
+              <h2>像搭积木一样制作准星</h2>
+              <p>先选造型，再调整大小、空隙和粗细；所有参数都会自动对齐游戏支持的数值。</p>
+            </div>
+            <div class="diy-history-actions">
+              <button id="diyUndo" class="secondary-button" disabled>↶ 撤销</button>
+              <button id="diyRedo" class="secondary-button" disabled>↷ 重做</button>
+              <button id="diyReset" class="secondary-button">恢复造型默认值</button>
+            </div>
+          </div>
+
+          <div class="diy-layout">
+            <div class="diy-preview-column">
+              <div class="diy-preview-card">
+                <div class="diy-preview-toolbar">
+                  <div><strong>实时预览</strong><span id="diyPreviewNote">放大 8× · 便于编辑</span></div>
+                  <div class="diy-zoom" id="diyZoomControls" aria-label="预览倍率">
+                    <button data-zoom="1">1:1</button>
+                    <button data-zoom="4">4×</button>
+                    <button class="active" data-zoom="8">8×</button>
+                  </div>
+                </div>
+                <div class="diy-preview scene-dark">
+                  <canvas id="diyCanvas" width="900" height="520" aria-label="DIY 准星实时预览"></canvas>
+                  <span class="diy-center-guide" aria-hidden="true"></span>
+                </div>
+                <div class="diy-code-preview">
+                  <span>实时生成的游戏代码</span>
+                  <code id="diyCode"></code>
+                </div>
+              </div>
+
+              <div class="diy-save-panel">
+                <label>
+                  <span>准星名称</span>
+                  <input id="diyName" type="text" maxlength="32" autocomplete="off" />
+                </label>
+                <div class="diy-save-actions">
+                  <button id="diyNew" class="secondary-button">新建</button>
+                  <button id="diyCopy" class="secondary-button">复制代码</button>
+                  <button id="diySave" class="primary-button">保存到我的 DIY</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="diy-controls-panel">
+              <section class="diy-control-section">
+                <div class="diy-section-title"><strong>1. 选择基础造型</strong><span>随时可以切换</span></div>
+                <div id="diyTemplates" class="diy-template-grid"></div>
+              </section>
+
+              <section class="diy-control-section">
+                <div class="diy-section-title"><strong>2. 调整外观</strong><span>简单模式</span></div>
+                <label class="diy-range-row">
+                  <span>整体大小<small>线条向外延伸的长度</small></span>
+                  <input id="diySize" type="range" min="0" max="20" step="1" />
+                  <output id="diySizeValue"></output>
+                </label>
+                <label class="diy-range-row">
+                  <span>中心空隙<small>四条线离中心的距离</small></span>
+                  <input id="diyGap" type="range" min="0" max="20" step="1" />
+                  <output id="diyGapValue"></output>
+                </label>
+                <label class="diy-range-row">
+                  <span>线条粗细<small>主准星的像素宽度</small></span>
+                  <input id="diyThickness" type="range" min="1" max="10" step="1" />
+                  <output id="diyThicknessValue"></output>
+                </label>
+
+                <div class="diy-select-grid">
+                  <label><span>中心标记</span><select id="diyDotMode"><option value="0" data-i18n-en="Off">关闭</option><option value="1">小点</option><option value="2">中点</option><option value="3">大点</option></select></label>
+                  <label><span>清晰边框</span><select id="diyOutlineMode"><option value="0" data-i18n-en="Off">关闭</option><option value="1">轻微</option><option value="2">明显</option></select></label>
+                  <label><span>准星颜色</span><select id="diyColor"><option value="0">白色</option><option value="1">绿色</option><option value="2">黄绿色</option><option value="4">黄色</option><option value="5">青色</option><option value="6">粉色</option><option value="7">红色</option><option value="8">自定义</option></select></label>
+                  <label id="diyCustomColorWrap" class="hidden"><span>自定义颜色</span><input id="diyCustomColor" type="color" value="#ffffff" /></label>
+                </div>
+                <label class="diy-switch-row"><span><strong>辅助线</strong><small>在主准星外增加第二层线条</small></span><input id="diyOuterEnabled" type="checkbox" /></label>
+              </section>
+
+              <details id="diyAdvanced" class="diy-advanced">
+                <summary><span><strong>高级模式</strong><small>分别调整主线、辅助线、边框和动态误差</small></span><b>展开</b></summary>
+                <div class="diy-advanced-body">
+                  <fieldset>
+                    <legend>主线</legend>
+                    <label><span>显示主线</span><input id="advInnerEnabled" type="checkbox" /></label>
+                    <label><span>水平长度</span><input id="advInnerLength" type="number" min="0" max="20" step="1" /></label>
+                    <label><span>垂直长度</span><input id="advInnerVertical" type="number" min="0" max="20" step="1" /></label>
+                    <label><span>粗细</span><input id="advInnerThickness" type="number" min="1" max="10" step="1" /></label>
+                    <label><span>间距</span><input id="advInnerOffset" type="number" min="0" max="20" step="1" /></label>
+                    <label><span>透明度</span><input id="advInnerOpacity" type="number" min="0" max="1" step="0.1" /></label>
+                    <label><span>移动误差</span><input id="advInnerMovement" type="checkbox" /></label>
+                    <label><span>射击误差</span><input id="advInnerFiring" type="checkbox" /></label>
+                  </fieldset>
+                  <fieldset>
+                    <legend>辅助线</legend>
+                    <label><span>显示辅助线</span><input id="advOuterEnabled" type="checkbox" /></label>
+                    <label><span>水平长度</span><input id="advOuterLength" type="number" min="0" max="20" step="1" /></label>
+                    <label><span>垂直长度</span><input id="advOuterVertical" type="number" min="0" max="20" step="1" /></label>
+                    <label><span>粗细</span><input id="advOuterThickness" type="number" min="1" max="10" step="1" /></label>
+                    <label><span>间距</span><input id="advOuterOffset" type="number" min="0" max="40" step="1" /></label>
+                    <label><span>透明度</span><input id="advOuterOpacity" type="number" min="0" max="1" step="0.1" /></label>
+                    <label><span>移动误差</span><input id="advOuterMovement" type="checkbox" /></label>
+                    <label><span>射击误差</span><input id="advOuterFiring" type="checkbox" /></label>
+                  </fieldset>
+                  <fieldset>
+                    <legend>中心点与边框</legend>
+                    <label><span>显示中心点</span><input id="advDotEnabled" type="checkbox" /></label>
+                    <label><span>中心点大小</span><input id="advDotThickness" type="number" min="1" max="6" step="1" /></label>
+                    <label><span>中心点透明度</span><input id="advDotOpacity" type="number" min="0" max="1" step="0.1" /></label>
+                    <label><span>显示边框</span><input id="advOutlineEnabled" type="checkbox" /></label>
+                    <label><span>边框粗细</span><input id="advOutlineThickness" type="number" min="1" max="6" step="1" /></label>
+                    <label><span>边框透明度</span><input id="advOutlineOpacity" type="number" min="0" max="1" step="0.1" /></label>
+                  </fieldset>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <section class="diy-saved-section">
+            <div class="diy-section-title"><strong>我的 DIY</strong><span>只保存在此设备</span></div>
+            <div id="diySavedGrid" class="diy-saved-grid"></div>
+            <div id="diySavedEmpty" class="diy-saved-empty">还没有保存的 DIY 准星。完成调整后点击“保存到我的 DIY”。</div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div id="drawerBackdrop" class="drawer-backdrop hidden"></div>
+    <aside id="detailDrawer" class="detail-drawer" aria-hidden="true">
+      <button class="drawer-close" id="drawerClose" aria-label="关闭详情">×</button>
+      <div class="detail-preview scene-urban" id="detailPreview">
+        <canvas id="detailCanvas" width="560" height="330"></canvas>
+        <span class="preview-pixel-note">静止主准星 · 游戏原始像素 1:1</span>
+        <div class="detail-zoom" id="detailZoomControls" aria-label="预览倍率">
+          <button class="active" data-zoom="1">1:1</button>
+          <button data-zoom="4">4×</button>
+          <button data-zoom="8">8×</button>
+        </div>
+        <div class="scene-controls" id="sceneControls">
+          <button class="active" data-scene="urban">训练场</button>
+          <button data-scene="light">浅色</button>
+          <button data-scene="dark">深色</button>
+        </div>
+      </div>
+      <div class="detail-body">
+        <div class="detail-kicker" id="detailKicker">职业选手 · 中国赛区</div>
+        <div class="detail-title-row">
+          <div>
+            <h2 id="detailTitle">ZmjjKK</h2>
+            <p id="detailMeta">Edward Gaming · 十字</p>
+          </div>
+          <button id="detailFavorite" class="favorite-large" aria-label="收藏">♡</button>
+        </div>
+        <p id="detailDescription" class="detail-description"></p>
+        <div class="tag-row" id="detailTags"></div>
+
+        <div class="code-panel">
+          <div class="code-panel-head">
+            <span>准星导入代码</span>
+            <span id="verifiedDate"></span>
+          </div>
+          <code id="detailCode"></code>
+          <button id="copyButton" class="copy-button">
+            <span>▣</span>
+            <strong>复制准星代码</strong>
+            <small>复制后请自行在游戏设置中导入</small>
+          </button>
+          <button id="editInDiyButton" class="edit-diy-button">在 DIY 工坊中继续调整</button>
+        </div>
+
+        <div class="safety-inline">
+          <span>✓</span>
+          <p><strong>只写入 Windows 剪贴板</strong>　不会访问游戏进程、文件、内存或反作弊组件。</p>
+        </div>
+        <div class="source-note" id="sourceNote"></div>
+      </div>
+    </aside>
+
+    <dialog id="importDialog" class="app-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+        <div class="dialog-icon">＋</div>
+        <p class="eyebrow">IMPORT & PREVIEW</p>
+        <h2>粘贴准星代码</h2>
+        <p class="dialog-lead">仅在本地解析并预览，不会自动导入游戏。</p>
+        <textarea id="importCode" rows="5" placeholder="例如：0;P;c;5;h;0;0l;4;0o;2;0a;1;1b;0"></textarea>
+        <div id="importError" class="form-error"></div>
+        <div class="dialog-actions">
+          <button value="cancel" class="ghost-button">取消</button>
+          <button type="button" id="previewImport" class="primary-button">立即预览</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="aboutDialog" class="app-dialog about-dialog">
+      <form method="dialog">
+        <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
+        <div class="safety-hero">✓</div>
+        <p class="eyebrow">SAFE BY DESIGN</p>
+        <h2>独立、离线、不接触游戏</h2>
+        <p class="dialog-lead">准星匣是一个本地准星图鉴和文本代码管理器，不是游戏插件或覆盖工具。</p>
+        <div class="safety-grid">
+          <div><span>✓</span><p><strong>不会检测游戏</strong><small>不查找或监听游戏进程</small></p></div>
+          <div><span>✓</span><p><strong>不会读取游戏</strong><small>不访问内存、目录或配置</small></p></div>
+          <div><span>✓</span><p><strong>不会注入覆盖层</strong><small>不挂载 DLL，不显示准星悬浮窗</small></p></div>
+          <div><span>✓</span><p><strong>仅使用剪贴板</strong><small>复制后由你手动粘贴导入</small></p></div>
+        </div>
+        <div class="about-meta">
+          <p>版本 <span id="appVersion">1.1.0</span></p>
+          <p id="editionLabel">正在读取版本信息…</p>
+          <button type="button" id="showDataButton" class="text-button">查看本地数据位置</button>
+        </div>
+        <button value="cancel" class="primary-button full-button">我知道了</button>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="./i18n.js"></script>
+    <script src="./catalog.js"></script>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
+

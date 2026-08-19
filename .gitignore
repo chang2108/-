@@ -1,0 +1,23 @@
+# Dependencies and package-manager cache
+node_modules/
+.pnpm-store/
+
+# Build output and local application data
+release/
+准星匣-data/
+
+# Tests and temporary artifacts
+test-artifacts/
+*.log
+*.tmp
+
+# Environment and editor files
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+

@@ -1,0 +1,68 @@
+{
+  "name": "crosshair-vault",
+  "version": "1.1.0",
+  "description": "独立离线的无畏契约准星图鉴与代码管理器",
+  "main": "electron/main.cjs",
+  "author": "Crosshair Vault",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "check": "node scripts/validate-catalog.cjs",
+    "test:smoke": "electron scripts/electron-smoke.cjs",
+    "dist": "npm run check && electron-builder --win nsis portable",
+    "dist:dir": "npm run check && electron-builder --dir --win"
+  },
+  "devDependencies": {
+    "electron": "^37.2.4",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "cn.crosshairvault.desktop",
+    "productName": "准星匣",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "准星匣-安装版-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "准星匣",
+      "installerLanguages": [
+        "zh_CN"
+      ],
+      "language": "2052"
+    },
+    "portable": {
+      "artifactName": "准星匣-${version}-便携版.${ext}",
+      "requestExecutionLevel": "user"
+    }
+  }
+}
+
