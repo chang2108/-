@@ -3,10 +3,6 @@ name: Build and attach Windows release
 on:
   release:
     types: [published]
-  push:
-    branches: [main]
-    paths:
-      - .github/workflows/release.yml
   workflow_dispatch:
     inputs:
       tag:
@@ -74,7 +70,7 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag || 'v1.1.0' }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
         run: |
           $version = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
           gh release upload "$env:RELEASE_TAG" `
