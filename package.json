@@ -10,7 +10,7 @@
     "start": "electron .",
     "check": "node scripts/validate-catalog.cjs",
     "test:smoke": "electron scripts/electron-smoke.cjs",
-    "dist": "npm run check && electron-builder --win nsis portable",
+    "dist": "npm run check && electron-builder --win nsis portable --publish never",
     "dist:dir": "npm run check && electron-builder --dir --win"
   },
   "devDependencies": {
