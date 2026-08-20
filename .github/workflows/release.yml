@@ -1,0 +1,76 @@
+name: Build and attach Windows release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate catalog and security boundary
+        shell: pwsh
+        run: |
+          pnpm run check
+          node scripts/security-audit.cjs
+
+      - name: Build installer and portable edition
+        run: pnpm run dist
+
+      - name: Package portable ZIP and checksums
+        shell: pwsh
+        run: |
+          $version = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
+          $installer = "准星匣-安装版-$version-x64.exe"
+          $portable = "准星匣-$version-便携版.exe"
+          $portableZip = "准星匣-$version-便携版.zip"
+
+          Compress-Archive `
+            -LiteralPath "release\$portable", "便携版使用说明.txt" `
+            -DestinationPath "release\$portableZip" `
+            -CompressionLevel Optimal `
+            -Force
+
+          $assets = @($installer, $portable, $portableZip)
+          $lines = foreach ($asset in $assets) {
+            $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath "release\$asset").Hash
+            "$hash  $asset"
+          }
+          Set-Content -LiteralPath "release\SHA256SUMS.txt" -Value $lines -Encoding utf8
+
+      - name: Upload files to the published release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          $version = (Get-Content -LiteralPath package.json -Raw | ConvertFrom-Json).version
+          gh release upload "$env:RELEASE_TAG" `
+            "release\准星匣-安装版-$version-x64.exe" `
+            "release\准星匣-$version-便携版.exe" `
+            "release\准星匣-$version-便携版.zip" `
+            "release\SHA256SUMS.txt" `
+            --clobber
+

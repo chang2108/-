@@ -1,4 +1,4 @@
-# 准星匣 Crosshair Vault
+# 准星匣：无畏契约 DIY 准星工具
 
 <p align="center">
   <img src="assets/icon.png" width="96" height="96" alt="准星匣图标" />
@@ -21,6 +21,10 @@
 准星匣将职业选手公开配置、常用准星、收藏和 DIY 工坊集中在一个本地桌面应用中。应用根据准星代码绘制像素级预览，复制后由用户自行进入游戏设置导入；程序不会连接、检测或修改游戏。
 
 版本 1.1.0 提供完整的中文和英文界面，首次启动默认使用中文。图鉴卡片和详情预览支持 `1×`、`4×`、`8×`，方便查看线宽、间距、中心点和轮廓细节。
+
+## 下载
+
+安装版、便携版和校验文件请前往 [GitHub Releases](../../releases) 下载。发布新版本时，仓库内置的 GitHub Actions 会自动构建 Windows 安装包并添加到对应 Release。
 
 ## 主要功能
 
@@ -65,6 +69,8 @@ pnpm test:smoke   # Electron 功能与像素绘制回归测试
 pnpm dist         # 构建 NSIS 安装版与便携版
 ```
 
+维护者发布版本时，在 GitHub 的 Releases 页面创建并发布对应标签（例如 `v1.1.0`）即可触发自动构建。发布说明模板见 [`RELEASE_NOTES_1.1.0.md`](RELEASE_NOTES_1.1.0.md)。
+
 项目结构：
 
 ```text
@@ -95,5 +101,4 @@ The app never accesses the game process, memory, files, registry, or anti-cheat 
 ## License
 
 源代码使用 [MIT License](LICENSE) 发布。
-
 
